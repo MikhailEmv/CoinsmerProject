@@ -1,0 +1,16 @@
+{% extends 'users/registration/base.html' %}
+
+{% block content %}
+<ul>
+    <li>
+        Активный пользователь: {{ user }}
+    </li>
+    <li>
+        <a href="{% url 'home' %}">На главную</a>
+    </li>
+</ul>
+<div class="row">
+    <p>Ваша ссылка не корректна, попробуйте ввести логин заново</p>
+    <a href="{% url 'login' %}">Ввести логин</a>
+</div>
+{% endblock %}

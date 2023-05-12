@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/styleCategory.css' %}">
+    <title>Категории</title>
+</head>
+<body>
+
+
+
+<footer>
+    <div class="footer">
+      <div class="footer-title">
+        <a href="{% url 'main' %}" class="home-link">SmartMoney</a>
+      </div>
+        <ul class="list-menu-footer">
+          <li>
+            <a class="nav-link" href="{% url 'main' %}">Главная</a>
+          </li>
+          <li>
+            <a class="nav-link" href="{% url 'accounts' %}">Счета</a>
+          </li>
+          <li>
+            <a class="nav-link" href="#">Статистика</a>
+          </li>
+          <li>
+            <a class="nav-link" href="{% url 'category_list' %}">Категории</a>
+          </li>
+          <li>
+            <a class="nav-link" href="#">Настройки</a>
+          </li>
+          <li>
+            {% if user.is_authenticated %}
+              <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+            {% endif %}
+          </li>
+        </ul>
+      <ul class="feedback">
+        <li>Если появились вопросы, свяжитесь с нами</li>
+        <li>E-mail: ratshackers@mail.ru</li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>
