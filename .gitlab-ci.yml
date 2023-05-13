@@ -6,7 +6,7 @@ variables:
   MYSQL_PASSWORD: $MYSQL_PASS
 
 default:
-  image: mydeployimage:dev
+  image: ubuntu:20.04
   services:
     - mysql:8.0
   cache:
