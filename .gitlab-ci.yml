@@ -1,8 +1,40 @@
-stages:
-  - deploy
+variables:
+  #DJANGO_CONFIG: "test"
+  MYSQL_DATABASE: $MYSQL_DB
+  MYSQL_ROOT_PASSWORD: $MYSQL_PASS
+  MYSQL_USER: $MYSQL_USER
+  MYSQL_PASSWORD: $MYSQL_PASS
 
-deploy-to-kubernetes:
-  stage: deploy
+default:
   image: mydeployimage:dev
-  scripts:
-    - kubectl apply -f kuberapp.yml
+  services:
+    - mysql:8.0
+  cache:
+    paths:
+      - ~/.cache/pip/
+  before_script:
+    - apt -y update
+    - apt -y install apt-utils
+    - apt -y install net-tools python3.8 python3-pip mysql-client libmysqlclient-dev
+    - apt -y upgrade
+    - pip3 install -r requirements.txt
+
+
+migrations:
+  stage: build
+  script:
+    - python3 manage.py makemigrations
+    - python3 manage.py migrate
+    - python3 manage.py check
+
+
+django-tests:
+  stage: test
+  script:
+    - echo "GRANT ALL on *.* to '${MYSQL_USER}';"| mysql -u root --password="${MYSQL_ROOT_PASSWORD}" -h mysql
+    - python3 manage.py test
+
+deploy:
+  stage: deploy
+  script: echo "Define your deployment script!"
+  environment: production
