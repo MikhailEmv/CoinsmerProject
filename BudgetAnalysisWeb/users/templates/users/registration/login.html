@@ -1,0 +1,35 @@
+{% extends 'users/registration/base.html' %}
+
+{% block title %}
+<title>Авторизация</title>
+{% endblock %}
+
+{% block content %}
+
+  {% if form.errors %}
+    <p>{{ form.errors.error }}</p>
+  {% endif %}
+
+<div class="container">
+  <div class="form-login">
+    <div class="active" class="form-login-title">
+      <ul>
+        <li class="active">Вход</li>
+        <li>
+          <a href="{% url 'register' %}">
+            Регистрация
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <form action="{% url 'login' %}" method="post">
+      {% csrf_token %}
+      {{ form }}
+      <div class="btn button-login-title">
+        <button type="submit" class="button-login">Войти</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

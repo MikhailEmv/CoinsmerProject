@@ -1,0 +1,16 @@
+Index: BudgetAnalysisWeb/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.idea\r\nsmartbudget
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/BudgetAnalysisWeb/.gitignore b/BudgetAnalysisWeb/.gitignore
+--- a/BudgetAnalysisWeb/.gitignore	(revision f631d82d617e5e49e453c57565fc4dffa96b25b4)
++++ b/BudgetAnalysisWeb/.gitignore	(date 1684245719783)
+@@ -1,2 +1,1 @@
+-.idea
+-smartbudget
+\ No newline at end of file
++.idea
+\ No newline at end of file

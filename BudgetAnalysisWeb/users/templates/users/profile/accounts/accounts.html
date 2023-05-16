@@ -1,0 +1,36 @@
+{% extends 'users/profile/accounts/accounts_base.html' %}
+{% load static %}
+
+{% block head %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/styleAccounts.css' %}">
+  <title>Счета</title>
+{% endblock %}
+
+{% block content %}
+<div class="f-block">
+
+    <div class="button-blocks">
+        <a class="transfer-button" href="{% url 'transfer' %}">
+          <img class="transfer-img" src="/static/images/Iconarrows-accounts.png"/>
+          <div class="transfer-title">Перевод между счетами</div>
+        </a>
+        <a class="add-account-button" href="{% url 'create_account' %}">Добавить счет</a><br>
+    </div>
+    <div class="accounts-block">
+
+    </div>
+
+    <ul>
+    {% for account in accounts %}
+      <li>{{ account.name }}: {{ account.balance }} RUB</li>
+        <a href="{% url 'edit_account' account.id %}">Редактировать</a>
+        <a href="{% url 'delete_account' account.id %}">Удалить</a>
+    {% endfor %}
+    </ul>
+</div>
+
+{% block footer %}
+{% endblock %}
+{% endblock %}
