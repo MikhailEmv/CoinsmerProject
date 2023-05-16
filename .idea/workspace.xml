@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="19f7b74e-7761-4d3b-bba0-0dc0125f7963" name="Changes" comment="Made Raw Addition of Operations" />
+    <list default="true" id="19f7b74e-7761-4d3b-bba0-0dc0125f7963" name="Changes" comment="Made Raw Addition of Operations">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/models.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -146,7 +150,21 @@
       <option name="project" value="LOCAL" />
       <updated>1684245741601</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Made Raw Addition of Operations">
+      <created>1684247821954</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1684247821954</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Made Raw Addition of Operations">
+      <created>1684247852362</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1684247852362</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

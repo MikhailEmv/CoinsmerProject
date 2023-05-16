@@ -116,38 +116,38 @@ def create_default_categories(sender, instance, created, **kwargs):
     if created:
         if CategoryModel.objects.filter(user=instance).count() == 0:
             default_categories_expenses = [
-                {'name': 'Кафе и рестораны', 'color': '#ABC270'},
-                {'name': 'Одежда и аксессуары', 'color': '#C2A170'},
-                {'name': 'Красота и здоровье', 'color': '#8FA1B1'},
-                {'name': 'Продукты', 'color': '#B74DAC'},
-                {'name': 'Все для дома', 'color': '#2B2988'},
-                {'name': 'Транспорт', 'color': '#5E876C'},
-                {'name': 'Развлечения', 'color': '#7A0C0C'},
-                {'name': 'Обязательные платежи', 'color': '#BEE12F'},
-                {'name': 'Переводы', 'color': '#FDA769'},
-                {'name': 'Другое', 'color': '#BB73DC'}
+                {'name': 'Кафе и рестораны', 'color': '#abc270'},
+                {'name': 'Одежда и аксессуары', 'color': '#c2a170'},
+                {'name': 'Красота и здоровье', 'color': '#8fa1b1'},
+                {'name': 'Продукты', 'color': '#b74dac'},
+                {'name': 'Все для дома', 'color': '#2b2988'},
+                {'name': 'Транспорт', 'color': '#5e876c'},
+                {'name': 'Развлечения', 'color': '#7a0c0c'},
+                {'name': 'Обязательные платежи', 'color': '#bee12f'},
+                {'name': 'Переводы', 'color': '#fda769'},
+                {'name': 'Другое', 'color': '#bb73dc'}
             ]
             default_categories_revenues = [
-                {'name': 'Зарплата', 'color': '#ABC270'},
-                {'name': 'Стипендия', 'color': '#C2A170'},
-                {'name': 'Социальные выплаты', 'color': '#8FA1B1'},
-                {'name': 'Проценты по вкладу', 'color': '#FDA769'},
-                {'name': 'Переводы', 'color': '#5E047D'},
-                {'name': 'Другое', 'color': '#313F42'}
+                {'name': 'Зарплата', 'color': '#abc270'},
+                {'name': 'Стипендия', 'color': '#c2a170'},
+                {'name': 'Социальные выплаты', 'color': '#8fa1b1'},
+                {'name': 'Проценты по вкладу', 'color': '#fda769'},
+                {'name': 'Переводы', 'color': '#5e047d'},
+                {'name': 'Другое', 'color': '#313f42'}
             ]
 
             for category_data in default_categories_expenses:
-                category = CategoryModel(user=instance, category_name=category_data['name'], key='Расходы')
-                icon_path = os.path.join(settings.MEDIA_ROOT, category_data['color'])
-                with open(icon_path, 'rb') as f:
-                    category.icon.save(os.path.basename(icon_path), File(f), save=True)
+                category = CategoryModel(user=instance,
+                                         category_name=category_data['name'],
+                                         key='Расходы',
+                                         color=category_data['color'])
                 category.save()
 
             for category_data in default_categories_revenues:
-                category = CategoryModel(user=instance, category_name=category_data['name'], key='Доходы')
-                icon_path = os.path.join(settings.MEDIA_ROOT, category_data['color'])
-                with open(icon_path, 'rb') as f:
-                    category.icon.save(os.path.basename(icon_path), File(f), save=True)
+                category = CategoryModel(user=instance,
+                                         category_name=category_data['name'],
+                                         key='Доходы',
+                                         color=category_data['color'])
                 category.save()
 
 
