@@ -1,0 +1,10 @@
+{% extends 'users/operations/operations_base.html' %}
+
+{% block content %}
+
+  <h1>Оппа</h1>
+  <a href="{% url 'add_operation' %}">Повседневные операции</a>
+  <hr>
+  <a href="{% url 'add_transaction' %}">Регулярные операции</a>
+
+{% endblock %}
