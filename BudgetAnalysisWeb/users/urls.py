@@ -35,13 +35,15 @@ urlpatterns = [
 
     path('transfer/', transfer, name='transfer'),
 
-    path('add-operation/', add_operation, name='add_operation'),
-    path('edit-operation/<int:operation_id>/', edit_operation, name='edit_operation'),
-    path('delete-operation/<int:operation_id>/', delete_operation, name='delete_operation'),
-    path('operation-list/', operation_list, name='operation_list'),
+    path('adding/add-operation/', add_operation, name='add_operation'),
+    path('adding/edit-operation/<int:operation_id>/', edit_operation, name='edit_operation'),
+    path('adding/delete-operation/<int:operation_id>/', delete_operation, name='delete_operation'),
+    path('adding/operation-list/', operation_list, name='operation_list'),
 
-    path('add-transaction/', add_regular_transaction, name='add_transaction'),
-    path('edit-transaction/<int:transaction_id>/', edit_regular_transaction, name='edit_transaction'),
-    path('delete-transaction/<int:transaction_id>/', delete_regular_transaction, name='delete_transaction'),
-    path('transaction-list/', regular_transaction_list, name='transaction_list'),
+    path('adding/add-transaction/', add_regular_transaction, name='add_transaction'),
+    path('adding/edit-transaction/<int:transaction_id>/', edit_regular_transaction, name='edit_transaction'),
+    path('adding/delete-transaction/<int:transaction_id>/', delete_regular_transaction, name='delete_transaction'),
+    path('adding/transaction-list/', regular_transaction_list, name='transaction_list'),
+
+    path('adding/', main_page_for_adding_operation, name='main_for_adding')
 ]

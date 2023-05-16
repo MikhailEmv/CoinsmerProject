@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -294,3 +293,7 @@ def delete_regular_transaction(request, transaction_id):
 def regular_transaction_list(request):
     transactions = RegularTransaction.objects.filter(user=request.user).order_by('-date')
     return render(request, 'users/operations/regular/transaction_list.html', {'transactions': transactions})
+
+
+def main_page_for_adding_operation(request):
+    return render(request, 'users/operations/operation_main.html')

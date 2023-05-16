@@ -7,6 +7,5 @@
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">Сохранить</button>
-  <a href="{% url 'add_transaction' %}">Добавление регулярных операций</a>
 </form>
 {% endblock %}
