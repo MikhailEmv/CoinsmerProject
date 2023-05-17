@@ -1,3 +1,8 @@
+import base64
+from collections import defaultdict
+from datetime import datetime, timedelta
+from io import BytesIO
+
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -10,8 +15,12 @@ from django.contrib.auth.tokens import default_token_generator as \
     token_generator
 from users.forms import AuthenticationForm, UserCreationFormImpl, UserProfileForm, CategoryForm, TransactionForm, \
     AccountForm, OperationForm, RegularTransactionForm
-from users.models import UserDataModel, CategoryModel, Account, Operation, RegularTransaction
+from users.models import UserDataModel, CategoryModel, Account, Operation, RegularTransaction, Transaction
 from users.utils import send_email_for_verify
+
+import matplotlib.pyplot as plt
+import pandas as pd
+from django.db.models import Sum
 
 User = get_user_model()
 
@@ -68,9 +77,89 @@ class Register(View):
         return render(request, self.template_name, context)
 
 
+def statistics_page(request):
+    return render(request, 'users/statistics/statistic_base.html')
+
+
 def main(request):
     accounts = Account.objects.filter(user=request.user)
-    return render(request, 'profile/main.html', {'accounts': accounts})
+    daily_operations = Operation.objects.filter(user=request.user)
+    regular_transactions = RegularTransaction.objects.filter(user=request.user)
+
+    # Фильтрация операций по типу (Расходы или Доходы)
+    expense_operations_daily = daily_operations.filter(key=Operation.EXPENSES)
+    income_operations_daily = daily_operations.filter(key=Operation.INCOME)
+    expense_operations_regular = regular_transactions.filter(key=RegularTransaction.EXPENSES)
+    income_operations_regular = regular_transactions.filter(key=RegularTransaction.INCOME)
+
+    # Объединение операций по типу (Расходы или Доходы)
+    expense_operations = list(expense_operations_daily) + list(expense_operations_regular)
+    income_operations = list(income_operations_daily) + list(income_operations_regular)
+
+    combined_operations = list(daily_operations) + list(regular_transactions)
+    sorted_operations = reversed(sorted(combined_operations, key=lambda op: op.date))
+
+    # Генерация круговых диаграмм для доходов и расходов
+    expense_pie = create_pie_chart(expense_operations)
+    income_pie = create_pie_chart(income_operations)
+
+    period = request.GET.get('period')
+
+    # Определение начальной и конечной даты в зависимости от выбранного периода
+    today = datetime.today().date()
+    if period == 'day':
+        start_date = today
+        end_date = today
+    elif period == 'week':
+        start_date = today - timedelta(days=6)
+        end_date = today
+    elif period == 'month':
+        start_date = today.replace(day=1)
+        end_date = today
+    elif period == 'year':
+        start_date = today.replace(month=1, day=1)
+        end_date = today
+    else:
+        start_date = None
+        end_date = None
+
+    # Фильтрация операций по выбранному периоду
+    if start_date and end_date:
+        daily_operations = daily_operations.filter(date__range=(start_date, end_date))
+        regular_transactions = regular_transactions.filter(date__range=(start_date, end_date))
+
+    context = {
+        'accounts': accounts,
+        'daily_operations': daily_operations,
+        'regular_transactions': regular_transactions,
+        'sorted_operations': sorted_operations,
+        'expense_pie': base64.b64encode(expense_pie).decode('utf-8'),
+        'income_pie': base64.b64encode(income_pie).decode('utf-8'),
+    }
+
+    return render(request, 'profile/main.html', context=context)
+
+
+def create_pie_chart(operations):
+    amounts = [operation.amount for operation in operations]
+    categories = [str(operation.category) for operation in operations]
+
+    # Создание круговой диаграммы
+    fig, ax = plt.subplots()
+    ax.pie(amounts, labels=categories, autopct='%1.1f%%', radius=0.6)
+
+    plt.tight_layout()
+
+    # Преобразование графика в изображение
+    image_stream = BytesIO()
+    plt.savefig(image_stream, format='png')
+    plt.close(fig)
+
+    # Перемещение указателя в начало потока и чтение данных изображения
+    image_stream.seek(0)
+    image_data = image_stream.getvalue()
+
+    return image_data
 
 
 @login_required

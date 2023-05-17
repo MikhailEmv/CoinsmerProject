@@ -98,7 +98,7 @@ class TransactionForm(forms.ModelForm):
 class OperationForm(forms.ModelForm):
     class Meta:
         model = Operation
-        fields = ['category', 'account', 'date', 'amount', 'comment']
+        fields = ['key', 'category', 'account', 'date', 'amount', 'comment']
         widgets = {
             'category': forms.Select(attrs={'class': 'form-select'}),
             'account': forms.Select(attrs={'class': 'form-select'}),
@@ -116,7 +116,7 @@ class OperationForm(forms.ModelForm):
 class RegularTransactionForm(forms.ModelForm):
     class Meta:
         model = RegularTransaction
-        fields = ['category', 'amount', 'account', 'date', 'periodicity', 'time_of_notification', 'comment']
+        fields = ['key', 'category', 'amount', 'account', 'date', 'periodicity', 'time_of_notification', 'comment']
         widgets = {
             'category': Select(attrs={'class': 'form-control'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control'}),
