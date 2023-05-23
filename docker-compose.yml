@@ -2,18 +2,7 @@ version: '2'
 services:
     web:
         build: ./web
-        hostname: budgetsmart.stk8s.66bit.ru/
-        environment:
-            - SECRET_KEY
-        command: uwsgi /usr/src/app/uwsgi.ini
-        volumes:
-            - static:/srv/static
-        restart: unless-stopped
-
-    # test:
-    #     image: registry.gitlab.com/username/project:${CI_BUILD_REF_NAME}
-    #     command: python manage.py test
-    #     restart: "no"
+        hostname: budgetsmart.stk8s.66bit.ru
 
     postgres:
         image: postgres:9.6
