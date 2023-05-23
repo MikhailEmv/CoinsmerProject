@@ -1,14 +1,38 @@
- version: '2'
- services:
-   db:
-     image: postgres
-   web:
-     build: .
-     hostname: 'http://budgetsmart.stk8s.66bit.ru/'
-     command: python manage.py runserver 0.0.0.0:8000
-     volumes:
-       - .:/code
-     ports:
-       - "8000:8000"
-     depends_on:
-       - db
+version: '2'
+services:
+    web:
+        # TODO: Смените username и project на подходящие вам значения.
+        image: http://budgetsmart.stk8s.66bit.ru/
+        build: ./web
+        environment:
+            - SECRET_KEY
+        command: uwsgi /usr/src/app/uwsgi.ini
+        volumes:
+            - static:/srv/static
+        restart: unless-stopped
+
+    # test:
+    #     image: registry.gitlab.com/username/project:${CI_BUILD_REF_NAME}
+    #     command: python manage.py test
+    #     restart: "no"
+
+    postgres:
+        image: postgres:9.6
+        environment:
+            - POSTGRES_USER=root
+            - POSTGRES_DB=database
+        volumes:
+            - data:/var/lib/postgresql/data
+        restart: unless-stopped
+
+    nginx:
+        image: nginx:mainline
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./nginx:/etc/nginx:ro
+            - static:/srv/static:ro
+        depends_on:
+            - web
+        restart: unless-stopped
