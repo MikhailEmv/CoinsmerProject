@@ -1,9 +1,8 @@
 version: '2'
 services:
     web:
-        # TODO: Смените username и project на подходящие вам значения.
-        image: http://budgetsmart.stk8s.66bit.ru/
         build: ./web
+        hostname: budgetsmart.stk8s.66bit.ru/
         environment:
             - SECRET_KEY
         command: uwsgi /usr/src/app/uwsgi.ini
