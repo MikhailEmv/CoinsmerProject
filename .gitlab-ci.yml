@@ -2,8 +2,6 @@ image: docker:latest
 services:
     - docker:dind
 
-variables:
-  DOCKER_HOST: http://budgetsmart.stk8s.66bit.ru/
 
 stages:
     - build
