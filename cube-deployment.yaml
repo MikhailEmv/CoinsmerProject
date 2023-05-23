@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smartbudget
+  namespace: budget
+  labels:
+    app: smartbudget
+    env: Production
+    owner: microbytes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: smartbudget
+  template:
+    metadata:
+      labels:
+        project: smartbudget
+    spec:
+      containers:
+        - name: api
+          image: *some-image*:latest
+          ports:
+            - containerPort: 80
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Production
+      imagePullSecrets:
+        - name: smartbudget-secret
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "2"
