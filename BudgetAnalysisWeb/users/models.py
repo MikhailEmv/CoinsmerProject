@@ -1,9 +1,5 @@
-import os
-
-from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
-from django.core.files import File
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -84,7 +80,7 @@ class Operation(models.Model):
         (INCOME, 'Доходы'),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     key = models.CharField(max_length=100, choices=CATEGORY_TYPE_CHOICES, default=EXPENSES, blank=True)
     category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)

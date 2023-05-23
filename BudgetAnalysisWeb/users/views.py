@@ -10,7 +10,7 @@ from django.contrib.auth.tokens import default_token_generator as \
     token_generator
 from users.forms import AuthenticationForm, UserCreationFormImpl, UserProfileForm, CategoryForm, TransactionForm, \
     AccountForm, OperationForm, RegularTransactionForm
-from users.models import UserDataModel, CategoryModel, Account, Operation, RegularTransaction, Transaction
+from users.models import UserDataModel, CategoryModel, Account, Operation, RegularTransaction
 from users.utils import send_email_for_verify
 
 User = get_user_model()

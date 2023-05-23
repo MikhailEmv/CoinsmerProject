@@ -4,18 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="19f7b74e-7761-4d3b-bba0-0dc0125f7963" name="Changes" comment="I began creating graphics">
-      <change afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/migrations/0008_auto_20230523_1833.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_05_2023_18_58__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_05_2023_18_58__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_05_2023_19_02__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_05_2023_19_02__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2023_17_03__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2023_17_03__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_1.xml" afterDir="false" />
+    <list default="true" id="19f7b74e-7761-4d3b-bba0-0dc0125f7963" name="Changes" comment="Graphics are done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/migrations/0008_auto_20230517_1621.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/main.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -195,6 +189,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Little changes" />
     <MESSAGE value="Made Raw Addition of Operations" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made Raw Addition of Operations" />
+    <MESSAGE value="Graphics are done" />
+    <option name="LAST_COMMIT_MESSAGE" value="Graphics are done" />
   </component>
 </project>
