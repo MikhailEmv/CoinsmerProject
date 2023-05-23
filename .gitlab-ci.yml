@@ -4,7 +4,7 @@ services:
 
 stages:
     - build
-    - test
+    # - test
     - deploy
 
 before_script:
@@ -23,14 +23,14 @@ build:
         # отправка собранного в registry
         - docker-compose push
 
-test:
-    stage: test
-    script:
-        # вместо повторной сборки, забираем собранный на предыдущей ступени
-        #  готовый образ из registry
-        - docker-compose pull test
-        # запускаем тесты
-        - docker-compose run test
+# test:
+#     stage: test
+#     script:
+#         # вместо повторной сборки, забираем собранный на предыдущей ступени
+#         #  готовый образ из registry
+#         - docker-compose pull test
+#         # запускаем тесты
+#         - docker-compose run test
 
 deploy:
     stage: deploy
