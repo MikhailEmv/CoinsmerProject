@@ -90,6 +90,106 @@
   </div>
 </div>
 
+    <h1>История операций</h1>
+
+    {% regroup sorted_operations by date as operations_by_date %}
+
+    {% for group in operations_by_date %}
+        <p>Дата: {{ group.grouper }}</p>
+        {% for operation in group.list %}
+        <ul>
+            {% if operation.key == 'Расходы' %}
+                <p>{{ operation.category }} || выведено {{ operation.amount }} ₽ со счета "{{ operation.account }}"</p>
+            {% else %}
+                <p>{{ operation.category }} || получено {{ operation.amount }} ₽ на счет "{{ operation.account }}"</p>
+            {% endif %}
+        </ul>
+        {% endfor %}
+    {% endfor %}
+
+    <hr>
+
+    <h1>Расходы</h1>
+
+    <div id="container1" style="width: 50%;">
+      <canvas id="pie-chart1"></canvas>
+    </div>
+
+    {% for daily_operation in daily_operations %}
+        {% if daily_operation.key == 'Расходы' %}
+            <p>{{ daily_operation.category }} - {{ daily_operation.amount }}</p>
+        {% endif %}
+    {% endfor %}
+    {% for regular_transaction in regular_transactions %}
+        {% if regular_transaction.key == 'Расходы' %}
+            <p>{{ regular_transaction.category }} {{ regular_transaction.amount }}</p>
+        {% endif %}
+    {% endfor %}
+
+    <hr>
+
+    <h2>Доходы</h2>
+
+    <div id="container2" style="width: 50%;">
+      <canvas id="pie-chart2"></canvas>
+    </div>
+
+    {% for daily_operation in daily_operations %}
+        {% if daily_operation.key == 'Доходы' %}
+            <p>{{ daily_operation.category }} - {{ daily_operation.amount }}</p>
+        {% endif %}
+    {% endfor %}
+    {% for regular_transaction in regular_transactions %}
+        {% if regular_transaction.key == 'Доходы' %}
+            <p>{{ regular_transaction.category }} {{ regular_transaction.amount }}</p>
+        {% endif %}
+    {% endfor %}
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+    <script>
+      var config1 = {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: {{ data_expenses|safe }},
+                backgroundColor: [
+                    'red', 'orange', 'blue'
+                ],
+                label: 'Label'
+            }],
+            labels: {{ labels_expenses|safe }}
+        },
+        options: {
+            responsive: true
+        }
+      };
+
+      var config2 = {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: {{ data_incomes|safe }},
+                backgroundColor: [
+                    'green', 'yellow', 'purple'
+                ],
+                label: 'Label'
+            }],
+            labels: {{ labels_incomes|safe }}
+        },
+        options: {
+            responsive: true
+        }
+      };
+
+      window.onload = function() {
+        var ctx1 = document.getElementById('pie-chart1').getContext('2d');
+        window.myPie1 = new Chart(ctx1, config1);
+
+        var ctx2 = document.getElementById('pie-chart2').getContext('2d');
+        window.myPie2 = new Chart(ctx2, config2);
+      };
+    </script>
 
     <footer>
     <div class="footer">
@@ -125,7 +225,5 @@
       </ul>
     </div>
   </footer>
-
-
 </body>
 </html>

@@ -2,6 +2,7 @@ import os
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import models
 from django.utils import timezone
@@ -50,7 +51,7 @@ class CategoryModel(models.Model):
     color = models.CharField(max_length=7, default="#000000")
 
     def __str__(self):
-        return f"{self.category_name}: {self.user}"
+        return f"{self.category_name}"
 
 
 class Account(models.Model):
@@ -76,7 +77,15 @@ class Transaction(models.Model):
 
 
 class Operation(models.Model):
+    EXPENSES = 'Расходы'
+    INCOME = 'Доходы'
+    CATEGORY_TYPE_CHOICES = (
+        (EXPENSES, 'Расходы'),
+        (INCOME, 'Доходы'),
+    )
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    key = models.CharField(max_length=100, choices=CATEGORY_TYPE_CHOICES, default=EXPENSES, blank=True)
     category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2, validators=[positive_number_validator])
@@ -84,7 +93,22 @@ class Operation(models.Model):
     comment = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.category.category_name} ({self.amount})"
+        return f"{self.key}, {self.category}, {self.amount}, " \
+               f"{self.account}, {self.date}, {self.comment}"
+
+    def save(self, *args, **kwargs):
+        if self.key == Operation.EXPENSES and self.amount > self.account.balance:
+            raise ValidationError("Сумма расхода превышает баланс счета.")
+
+        super().save(*args, **kwargs)
+
+        if self.key == Operation.EXPENSES:
+            self.account.balance -= self.amount
+            self.account.save()
+
+        elif self.key == Operation.INCOME:
+            self.account.balance += self.amount
+            self.account.save()
 
 
 class RegularTransaction(models.Model):
@@ -99,17 +123,40 @@ class RegularTransaction(models.Model):
         (YEAR, 'Год'),
     )
 
-    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    EXPENSES = 'Расходы'
+    INCOME = 'Доходы'
+    CATEGORY_TYPE_CHOICES = (
+        (EXPENSES, 'Расходы'),
+        (INCOME, 'Доходы'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    key = models.CharField(max_length=100, choices=CATEGORY_TYPE_CHOICES, default=EXPENSES, blank=True)
     category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, validators=[positive_number_validator])
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, validators=[positive_number_validator])
     date = models.DateField()
     periodicity = models.CharField(max_length=10, choices=PERIODICITY_CHOICES, default=DAY)
     time_of_notification = models.TimeField()
     comment = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.user}: {self.amount} ({self.category}, {self.account})"
+        return f"{self.key}, {self.category}, {self.amount}, " \
+               f"{self.account}, {self.date}, {self.comment}"
+
+    def save(self, *args, **kwargs):
+        if self.key == RegularTransaction.EXPENSES and self.amount > self.account.balance:
+            raise ValidationError("Сумма расхода превышает баланс счета.")
+
+        super().save(*args, **kwargs)
+
+        if self.key == RegularTransaction.EXPENSES:
+            self.account.balance -= self.amount
+            self.account.save()
+
+        elif self.key == RegularTransaction.INCOME:
+            self.account.balance += self.amount
+            self.account.save()
 
 
 def create_default_categories(sender, instance, created, **kwargs):

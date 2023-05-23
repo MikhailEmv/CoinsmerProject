@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+from io import BytesIO
+import base64
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -12,6 +15,7 @@ from users.forms import AuthenticationForm, UserCreationFormImpl, UserProfileFor
     AccountForm, OperationForm, RegularTransactionForm
 from users.models import UserDataModel, CategoryModel, Account, Operation, RegularTransaction
 from users.utils import send_email_for_verify
+import matplotlib.pyplot as plt
 
 User = get_user_model()
 
@@ -70,7 +74,47 @@ class Register(View):
 
 def main(request):
     accounts = Account.objects.filter(user=request.user)
-    return render(request, 'profile/main.html', {'accounts': accounts})
+
+    daily_operations = Operation.objects.filter(user=request.user)
+    regular_transactions = RegularTransaction.objects.filter(user=request.user)
+
+    # Фильтрация операций по типу (Расходы или Доходы)
+    expense_operations_daily = daily_operations.filter(key=Operation.EXPENSES)
+    income_operations_daily = daily_operations.filter(key=Operation.INCOME)
+    expense_operations_regular = regular_transactions.filter(key=RegularTransaction.EXPENSES)
+    income_operations_regular = regular_transactions.filter(key=RegularTransaction.INCOME)
+
+    # Объединение операций по типу (Расходы или Доходы)
+    expense_operations = list(expense_operations_daily) + list(expense_operations_regular)
+    income_operations = list(income_operations_daily) + list(income_operations_regular)
+
+    data_expenses = []
+    labels_expenses = []
+    for expense_operation in expense_operations:
+        data_expenses.append(int(expense_operation.amount))
+        labels_expenses.append(str(expense_operation.category.category_name))
+
+    data_incomes = []
+    labels_incomes = []
+    for income_operation in income_operations:
+        data_incomes.append(int(income_operation.amount))
+        labels_incomes.append(str(income_operation.category.category_name))
+
+    combined_operations = list(daily_operations) + list(regular_transactions)
+    sorted_operations = reversed(sorted(combined_operations, key=lambda op: op.date))
+
+    context = {
+        'accounts': accounts,
+        'daily_operations': daily_operations,
+        'regular_transactions': regular_transactions,
+        'sorted_operations': sorted_operations,
+        'data_expenses': data_expenses,
+        'labels_expenses': labels_expenses,
+        'data_incomes': data_incomes,
+        'labels_incomes': labels_incomes,
+    }
+
+    return render(request, 'profile/main.html', context=context)
 
 
 @login_required
@@ -219,7 +263,7 @@ def add_operation(request):
             operation = form.save(commit=False)
             operation.user = request.user
             operation.save()
-            return redirect('operation_list')
+            return redirect('main')
     else:
         form = OperationForm(request.user, initial={'date': timezone.now().date()})
     return render(request, 'users/operations/day-to-day/add_operation.html', {'form': form})
@@ -234,7 +278,7 @@ def edit_operation(request, operation_id):
             operation = form.save(commit=False)
             operation.user = request.user
             operation.save()
-            return redirect('operation_list')
+            return redirect('main')
     else:
         form = OperationForm(request.user, instance=operation)
     return render(request, 'users/operations/day-to-day/edit_operation.html', {'form': form})
@@ -244,7 +288,7 @@ def edit_operation(request, operation_id):
 def delete_operation(request, operation_id):
     operation = Operation.objects.get(id=operation_id)
     operation.delete()
-    return redirect('operation_list')
+    return redirect('main')
 
 
 @login_required
@@ -261,7 +305,7 @@ def add_regular_transaction(request):
             transaction = form.save(commit=False)
             transaction.user = request.user
             transaction.save()
-            return redirect('transaction_list')
+            return redirect('main')
     else:
         form = RegularTransactionForm(request.user, initial={'date': timezone.now().date()})
     return render(request, 'users/operations/regular/add_transaction.html', {'form': form})
@@ -276,7 +320,7 @@ def edit_regular_transaction(request, transaction_id):
             transaction = form.save(commit=False)
             transaction.user = request.user
             transaction.save()
-            return redirect('transaction_list')
+            return redirect('main')
     else:
         form = RegularTransactionForm(request.user, instance=transaction)
     return render(request, 'users/operations/regular/edit_transaction.html', {'form': form})
@@ -286,7 +330,7 @@ def edit_regular_transaction(request, transaction_id):
 def delete_regular_transaction(request, transaction_id):
     transaction = RegularTransaction.objects.get(id=transaction_id)
     transaction.delete()
-    return redirect('transaction_list')
+    return redirect('main')
 
 
 @login_required
