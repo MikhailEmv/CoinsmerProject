@@ -2,6 +2,9 @@ image: docker:latest
 services:
     - docker:dind
 
+variables:
+  SITE_URL: "http://budgetsmart.stk8s.66bit.ru/"
+
 stages:
     - build
     # - test
