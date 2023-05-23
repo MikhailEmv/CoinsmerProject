@@ -3,7 +3,7 @@ services:
     - docker:dind
 
 variables:
-  SITE_URL: "http://budgetsmart.stk8s.66bit.ru/"
+  DOCKER_HOST: http://budgetsmart.stk8s.66bit.ru/
 
 stages:
     - build
