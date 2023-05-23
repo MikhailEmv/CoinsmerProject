@@ -1,18 +1,14 @@
-version: '3.7'
- 
-services:
-  web:
-    image: 'gitlab/gitlab-ce:15.2.0-ce.0'
-    restart: always
-    hostname: 'https://budgetsmart.stk8s.66bit.ru/'
-    environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        gitlab_rails['gitlab_shell_ssh_port'] = 2224
-    ports:
-      - '127.0.0.1:8080:80'
-      - '2224:22'
-    volumes:
-      - './config:/etc/gitlab'
-      - './logs:/var/log/gitlab'
-      - './data:/var/opt/gitlab'
-    shm_size: '256m'
+ version: '2'
+ services:
+   db:
+     image: postgres
+   web:
+     build: .
+     hostname: 'http://budgetsmart.stk8s.66bit.ru/'
+     command: python manage.py runserver 0.0.0.0:8000
+     volumes:
+       - .:/code
+     ports:
+       - "8000:8000"
+     depends_on:
+       - db
