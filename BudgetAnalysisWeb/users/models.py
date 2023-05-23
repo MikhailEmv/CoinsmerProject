@@ -130,7 +130,7 @@ class RegularTransaction(models.Model):
         (INCOME, 'Доходы'),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     key = models.CharField(max_length=100, choices=CATEGORY_TYPE_CHOICES, default=EXPENSES, blank=True)
     category = models.ForeignKey(CategoryModel, on_delete=models.CASCADE)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)

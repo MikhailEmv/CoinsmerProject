@@ -1,6 +1,3 @@
-from datetime import datetime, timedelta
-from io import BytesIO
-import base64
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -13,9 +10,8 @@ from django.contrib.auth.tokens import default_token_generator as \
     token_generator
 from users.forms import AuthenticationForm, UserCreationFormImpl, UserProfileForm, CategoryForm, TransactionForm, \
     AccountForm, OperationForm, RegularTransactionForm
-from users.models import UserDataModel, CategoryModel, Account, Operation, RegularTransaction
+from users.models import UserDataModel, CategoryModel, Account, Operation, RegularTransaction, Transaction
 from users.utils import send_email_for_verify
-import matplotlib.pyplot as plt
 
 User = get_user_model()
 
