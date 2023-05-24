@@ -1,9 +1,33 @@
-k8s_deploy_back:
-  stage: deploy
-  image:  hub.66bit.ru/shared/stk8s:1.26.2
-  script:
-    - kubectl delete -f cube-deployment.yaml
-    - kubectl apply -f cube-deployment.yaml
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: manual
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: budgetsmart
+  namespace: budgetsmart
+  labels:
+    app: budgetsmart
+    env: Production
+    owner: Microbytes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: budgetsmart
+  template:
+    metadata:
+      labels:
+        project: budgetsmart
+    spec:
+      containers:
+        - name: api
+          image:  hub.66bit.ru/shared/stk8s:1.26.2:latest
+          ports:
+            - containerPort: 80
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Production
+      imagePullSecrets:
+        - name: budgetsmart-secret
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "2"

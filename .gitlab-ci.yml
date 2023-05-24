@@ -1,39 +1,27 @@
-image: docker:latest
-services:
-    - docker:dind
-
 stages:
     - build
-    # - test
     - deploy
-
-before_script:
-    # установка pip
-    - apk add --no-cache py-pip
-    # установка docker-compose
-    - pip install docker-compose==1.9.0
-    # логин в Gitlab Docker registry
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
 
 build:
     stage: build
+    before_script:
+      - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     script:
-        # собственно сборка
-        - docker-compose build
-        # отправка собранного в registry
-        - docker-compose push
+      - docker build --pull -t $TAG_COMMIT -t $TAG_LATEST .
+      - docker push $TAG_COMMIT
+      - docker push $TAG_LATEST
+    after_script:
+      - docker logout $CI_REGISTRY
+    when: manual
+    only: 
 
-# test:
-#     stage: test
-#     script:
-#         # вместо повторной сборки, забираем собранный на предыдущей ступени
-#         #  готовый образ из registry
-#         - docker-compose pull test
-#         # запускаем тесты
-#         - docker-compose run test
-
-deploy-to-kubernetes:
+k8s_deploy_back:
   stage: deploy
-  image: mydeployimage:dev
-  scripts:
-    - kubectl apply -f kuberapp.yml
+  image:  hub.66bit.ru/shared/stk8s:1.26.2
+  script:
+    - kubectl delete -f cube-deployment.yaml
+    - kubectl apply -f cube-deployment.yaml
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+
