@@ -1,41 +1,31 @@
-
-services:
-    - docker:dind
-
-stages:
+  stages:
     - build
-    # - test
     - deploy
 
-variables:
-  TAG_LATEST: $CI_REGISTRY_IMAGE:latest
-  TAG_COMMIT: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+  variables:
+    TAG_LATEST: $CI_REGISTRY_IMAGE:latest
 
-image: docker:latest
+  image: docker:latest
 
-build:
+  build:
     stage: build
+    before_script:
+      - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     script:
-        # собственно сборка
-        - docker-compose build
-        # отправка собранного в registry
-        - docker-compose push
+      - docker build --pull -t $TAG_LATEST .
+      - docker push $TAG_LATEST
+    after_script:
+      - docker logout $CI_REGISTRY
+    when: manual
+    only:
+      - main
 
-# test:
-#     stage: test
-#     script:
-#         # вместо повторной сборки, забираем собранный на предыдущей ступени
-#         #  готовый образ из registry
-#         - docker-compose pull test
-#         # запускаем тесты
-#         - docker-compose run test
-
-k8s_deploy_back:
-  stage: deploy
-  image:  hub.66bit.ru/shared/stk8s:1.26.2
-  script:
-    - kubectl delete -f cube-deployment.yaml
-    - kubectl apply -f cube-deployment.yaml
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-      when: manual
+  k8s_deploy_back:
+    stage: deploy
+    image:  hub.66bit.ru/shared/stk8s:1.26.2
+    script:
+      - kubectl delete -f cube-deployment.yaml
+      - kubectl apply -f cube-deployment.yaml
+    rules:
+      - if: $CI_COMMIT_BRANCH == "main"
+        when: manual
