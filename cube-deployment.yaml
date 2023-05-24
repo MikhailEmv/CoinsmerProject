@@ -1,33 +1,8 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: smartbudget
-  namespace: budget
-  labels:
-    app: smartbudget
-    env: Production
-    owner: microbytes
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      project: smartbudget
-  template:
-    metadata:
-      labels:
-        project: smartbudget
-    spec:
-      containers:
-        - name: api
-          image: *some-image*:latest
-          ports:
-            - containerPort: 80
-          env:
-          - name: ASPNETCORE_ENVIRONMENT
-            value: Production
-      imagePullSecrets:
-        - name: smartbudget-secret
-      dnsConfig:
-        options:
-          - name: ndots
-            value: "2"
+stages:
+  - deploy
+
+deploy-to-kubernetes:
+  stage: deploy
+  image: hub.66bit.ru/urfu2022/ci/deploy:1.26.2
+  scripts:
+    - kubectl apply -f kuberapp.yml
