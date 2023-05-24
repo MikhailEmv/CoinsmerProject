@@ -1,4 +1,4 @@
-image: docker:latest
+
 services:
     - docker:dind
 
@@ -7,13 +7,11 @@ stages:
     # - test
     - deploy
 
-before_script:
-    # установка pip
-    - apk add --no-cache py-pip
-    # установка docker-compose
-    - pip install docker-compose==1.9.0
-    # логин в Gitlab Docker registry
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+variables:
+  TAG_LATEST: $CI_REGISTRY_IMAGE:latest
+  TAG_COMMIT: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+
+image: docker:latest
 
 build:
     stage: build
