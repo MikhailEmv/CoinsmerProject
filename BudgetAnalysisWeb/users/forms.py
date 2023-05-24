@@ -1,3 +1,4 @@
+import accounts as accounts
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.forms import (
     UserCreationForm as DjangoUserCreationForm,
@@ -130,4 +131,15 @@ class RegularTransactionForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].queryset = CategoryModel.objects.filter(user=user)
+        self.fields['account'].queryset = Account.objects.filter(user=user)
+
+
+class OperationFilterForm(forms.Form):
+    account = forms.ModelChoiceField(queryset=Account.objects.none(), required=False, empty_label="Все счета",)
+    period = forms.ChoiceField(choices=RegularTransaction.PERIODICITY_CHOICES)
+    start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.fields['account'].queryset = Account.objects.filter(user=user)

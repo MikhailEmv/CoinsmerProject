@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -9,7 +11,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.tokens import default_token_generator as \
     token_generator
 from users.forms import AuthenticationForm, UserCreationFormImpl, UserProfileForm, CategoryForm, TransactionForm, \
-    AccountForm, OperationForm, RegularTransactionForm
+    AccountForm, OperationForm, RegularTransactionForm, OperationFilterForm
 from users.models import UserDataModel, CategoryModel, Account, Operation, RegularTransaction
 from users.utils import send_email_for_verify
 
@@ -68,13 +70,39 @@ class Register(View):
         return render(request, self.template_name, context)
 
 
+@login_required
 def main(request):
     accounts = Account.objects.filter(user=request.user)
-
     daily_operations = Operation.objects.filter(user=request.user)
     regular_transactions = RegularTransaction.objects.filter(user=request.user)
 
-    # Фильтрация операций по типу (Расходы или Доходы)
+    if request.method == 'POST':
+        form = OperationFilterForm(request.user, request.POST)
+        if form.is_valid():
+            account = form.cleaned_data['account']
+            period = form.cleaned_data['period']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+
+            if account:
+                daily_operations = daily_operations.filter(account=account)
+                regular_transactions = regular_transactions.filter(account=account)
+
+            if period == 'day':
+                start_date = end_date
+            elif period == 'week':
+                start_date = end_date - timedelta(days=6)
+            elif period == 'month':
+                start_date = end_date.replace(day=1)
+            elif period == 'year':
+                start_date = end_date.replace(month=1, day=1)
+
+            daily_operations = daily_operations.filter(date__range=(start_date, end_date))
+            regular_transactions = regular_transactions.filter(date__range=(start_date, end_date))
+
+    else:
+        form = OperationFilterForm(request.user)
+
     expense_operations_daily = daily_operations.filter(key=Operation.EXPENSES)
     income_operations_daily = daily_operations.filter(key=Operation.INCOME)
     expense_operations_regular = regular_transactions.filter(key=RegularTransaction.EXPENSES)
@@ -83,6 +111,9 @@ def main(request):
     # Объединение операций по типу (Расходы или Доходы)
     expense_operations = list(expense_operations_daily) + list(expense_operations_regular)
     income_operations = list(income_operations_daily) + list(income_operations_regular)
+
+    combined_operations = list(daily_operations) + list(regular_transactions)
+    sorted_operations = reversed(sorted(combined_operations, key=lambda op: op.date))
 
     data_expenses = []
     labels_expenses = []
@@ -96,8 +127,82 @@ def main(request):
         data_incomes.append(int(income_operation.amount))
         labels_incomes.append(str(income_operation.category.category_name))
 
+    context = {
+        'accounts': accounts,
+        'daily_operations': daily_operations,
+        'regular_transactions': regular_transactions,
+        'sorted_operations': sorted_operations,
+        'data_expenses': data_expenses,
+        'labels_expenses': labels_expenses,
+        'data_incomes': data_incomes,
+        'labels_incomes': labels_incomes,
+        'form': form,
+    }
+
+    return render(request, 'profile/main.html', context=context)
+
+
+@login_required
+def statistics_page(request):
+    accounts = Account.objects.filter(user=request.user)
+    daily_operations = Operation.objects.filter(user=request.user)
+    regular_transactions = RegularTransaction.objects.filter(user=request.user)
+
+    if request.method == 'POST':
+        form = OperationFilterForm(request.user, request.POST)
+        if form.is_valid():
+            account = form.cleaned_data['account']
+            period = form.cleaned_data['period']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+
+            if account:
+                daily_operations = daily_operations.filter(account=account)
+                regular_transactions = regular_transactions.filter(account=account)
+
+            if period == 'day':
+                start_date = end_date
+            elif period == 'week':
+                start_date = end_date - timedelta(days=6)
+            elif period == 'month':
+                start_date = end_date.replace(day=1)
+            elif period == 'year':
+                start_date = end_date.replace(month=1, day=1)
+
+            daily_operations = daily_operations.filter(date__range=(start_date, end_date))
+            regular_transactions = regular_transactions.filter(date__range=(start_date, end_date))
+
+    else:
+        form = OperationFilterForm(request.user)
+
+    expense_operations_daily = daily_operations.filter(key=Operation.EXPENSES)
+    income_operations_daily = daily_operations.filter(key=Operation.INCOME)
+    expense_operations_regular = regular_transactions.filter(key=RegularTransaction.EXPENSES)
+    income_operations_regular = regular_transactions.filter(key=RegularTransaction.INCOME)
+
+    # Объединение операций по типу (Расходы или Доходы)
+    expense_operations = list(expense_operations_daily) + list(expense_operations_regular)
+    income_operations = list(income_operations_daily) + list(income_operations_regular)
+
     combined_operations = list(daily_operations) + list(regular_transactions)
     sorted_operations = reversed(sorted(combined_operations, key=lambda op: op.date))
+
+    data_expenses = []
+    labels_expenses = []
+    for expense_operation in expense_operations:
+        data_expenses.append(int(expense_operation.amount))
+        labels_expenses.append(str(expense_operation.category.category_name))
+
+    data_incomes = []
+    labels_incomes = []
+    for income_operation in income_operations:
+        data_incomes.append(int(income_operation.amount))
+        labels_incomes.append(str(income_operation.category.category_name))
+
+    results = [sum(data_expenses),
+               sum(data_incomes),
+               sum(data_incomes) - sum(data_expenses)]
+    string_result = ['Расходы', 'Доходы', 'Прибыль']
 
     context = {
         'accounts': accounts,
@@ -108,9 +213,12 @@ def main(request):
         'labels_expenses': labels_expenses,
         'data_incomes': data_incomes,
         'labels_incomes': labels_incomes,
+        'results': results,
+        'string_results': string_result,
+        'form': form,
     }
 
-    return render(request, 'profile/main.html', context=context)
+    return render(request, 'statistics/statistic_main.html', context=context)
 
 
 @login_required

@@ -48,24 +48,6 @@
     {% endblock %}
   </div>
 
-    <h1>Ежедневные</h1>
-    {% for daily_operation in daily_operations %}
-        <p>{{ daily_operation }}</p>
-        <hr>
-    {% endfor %}
-
-    <h2>Регулярные</h2>
-    {% for regular_transaction in regular_transactions %}
-        <p>{{ regular_transaction }}</p>
-        <hr>
-    {% endfor %}
-
-    <!-- Расходы -->
-    <img src="data:image/png;base64,{{ expense_pie }}" alt="Расходы">
-    <hr>
-    <!-- Доходы -->
-    <img src="data:image/png;base64,{{ income_pie }}" alt="Доходы">
-
   <footer>
     <div class="footer">
       <div class="footer-title">

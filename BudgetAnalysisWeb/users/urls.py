@@ -46,4 +46,6 @@ urlpatterns = [
     path('adding/transaction-list/', regular_transaction_list, name='transaction_list'),
 
     path('adding/', main_page_for_adding_operation, name='main_for_adding'),
+
+    path('statistics/', statistics_page, name='statistics'),
 ]
