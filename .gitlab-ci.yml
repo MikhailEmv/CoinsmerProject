@@ -12,7 +12,7 @@
     before_script:
       - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     script:
-      - docker build --pull -t $TAG_LATEST .
+      - docker build --pull -t $TAG_LATEST -f Dockerfile .
       - docker push $TAG_LATEST
     after_script:
       - docker logout $CI_REGISTRY
