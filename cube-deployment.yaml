@@ -1,8 +1,9 @@
-stages:
-  - deploy
-
-deploy-to-kubernetes:
+k8s_deploy_back:
   stage: deploy
-  image: hub.66bit.ru/shared/stk8s:1.26.2
-  scripts:
-    - kubectl apply -f kuberapp.yml
+  image:  hub.66bit.ru/shared/stk8s:1.26.2
+  script:
+    - kubectl delete -f cube-deployment.yaml
+    - kubectl apply -f cube-deployment.yaml
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
