@@ -4,26 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="19f7b74e-7761-4d3b-bba0-0dc0125f7963" name="Changes" comment="Graphics are done">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_05_2023_18_58_[Changes]/db.sqlite3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_05_2023_18_58_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_05_2023_18_58__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_05_2023_19_02_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_16_05_2023_19_02__Changes_.xml" beforeDir="false" />
+    <list default="true" id="19f7b74e-7761-4d3b-bba0-0dc0125f7963" name="Changes" comment="Statistic page is created">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/BudgetAnalysisWeb/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/BudgetAnalysisWeb/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/operations/operations_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/operations/operations_base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/accounts/accounts_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/accounts/accounts_base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/categories.html" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/categories.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/categories/category_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/categories/category_base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/profile/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/statistics/statistic_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/statistics/statistic_base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/statistics/statistic_main.html" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/templates/users/statistics/statistic_main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BudgetAnalysisWeb/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/BudgetAnalysisWeb/users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -189,7 +175,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684872202619</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Statistic page is created">
+      <created>1684934431913</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1684934431913</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -211,6 +204,7 @@
     <MESSAGE value="Little changes" />
     <MESSAGE value="Made Raw Addition of Operations" />
     <MESSAGE value="Graphics are done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Graphics are done" />
+    <MESSAGE value="Statistic page is created" />
+    <option name="LAST_COMMIT_MESSAGE" value="Statistic page is created" />
   </component>
 </project>

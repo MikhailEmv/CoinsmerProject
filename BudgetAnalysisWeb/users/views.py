@@ -11,7 +11,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.tokens import default_token_generator as \
     token_generator
 from users.forms import AuthenticationForm, UserCreationFormImpl, UserProfileForm, CategoryForm, TransactionForm, \
-    AccountForm, OperationForm, RegularTransactionForm, OperationFilterForm
+    AccountForm, OperationForm, RegularTransactionForm, OperationFilterForm, OperationFilterForStatisticForm
 from users.models import UserDataModel, CategoryModel, Account, Operation, RegularTransaction
 from users.utils import send_email_for_verify
 
@@ -149,7 +149,7 @@ def statistics_page(request):
     regular_transactions = RegularTransaction.objects.filter(user=request.user)
 
     if request.method == 'POST':
-        form = OperationFilterForm(request.user, request.POST)
+        form = OperationFilterForStatisticForm(request.user, request.POST)
         if form.is_valid():
             account = form.cleaned_data['account']
             period = form.cleaned_data['period']
@@ -173,7 +173,7 @@ def statistics_page(request):
             regular_transactions = regular_transactions.filter(date__range=(start_date, end_date))
 
     else:
-        form = OperationFilterForm(request.user)
+        form = OperationFilterForStatisticForm(request.user)
 
     expense_operations_daily = daily_operations.filter(key=Operation.EXPENSES)
     income_operations_daily = daily_operations.filter(key=Operation.INCOME)
@@ -189,20 +189,30 @@ def statistics_page(request):
 
     data_expenses = []
     labels_expenses = []
+    dates_expenses = []
     for expense_operation in expense_operations:
         data_expenses.append(int(expense_operation.amount))
         labels_expenses.append(str(expense_operation.category.category_name))
+        dates_expenses.append(int(expense_operation.date.month))
 
     data_incomes = []
     labels_incomes = []
+    dates_incomes = []
+    d = {}
     for income_operation in income_operations:
         data_incomes.append(int(income_operation.amount))
         labels_incomes.append(str(income_operation.category.category_name))
+        dates_incomes.append(income_operation.date.strftime('%B'))
 
     results = [sum(data_expenses),
                sum(data_incomes),
                sum(data_incomes) - sum(data_expenses)]
+
     string_result = ['Расходы', 'Доходы', 'Прибыль']
+
+    all_months = [month for month in range(1, 13)]
+    income_months = list(set(dates_incomes))
+    month_labels = [str(month) if month in income_months else '' for month in all_months]
 
     context = {
         'accounts': accounts,
@@ -215,6 +225,9 @@ def statistics_page(request):
         'labels_incomes': labels_incomes,
         'results': results,
         'string_results': string_result,
+        'dates_incomes': dates_incomes,
+        'dates_expenses': dates_expenses,
+        'month_labels': month_labels,
         'form': form,
     }
 

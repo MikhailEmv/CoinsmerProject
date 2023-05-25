@@ -155,9 +155,6 @@ class RegularTransaction(models.Model):
             self.account.save()
 
 
-
-
-
 def create_default_categories(sender, instance, created, **kwargs):
     if created:
         if CategoryModel.objects.filter(user=instance).count() == 0:

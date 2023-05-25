@@ -143,3 +143,14 @@ class OperationFilterForm(forms.Form):
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['account'].queryset = Account.objects.filter(user=user)
+
+
+class OperationFilterForStatisticForm(forms.Form):
+    account = forms.ModelChoiceField(queryset=Account.objects.none(), required=False, empty_label="Все счета",)
+    period = forms.ChoiceField(choices=RegularTransaction.PERIODICITY_CHOICES)
+    start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    end_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['account'].queryset = Account.objects.filter(user=user)
