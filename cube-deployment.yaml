@@ -1,20 +1,18 @@
-apiVersion: cubejs.com/v1
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: coinsmer-cube-deployment
+  name: tcc-postgres-ingress
+  namespace: cal-core
 spec:
-  image: docker:latest  # заменить на имя и тег нашего Docker-образа для развертывания Cube.js
-  replicas: 2
-  ports:
-    - containerPort: 5432
-  env:
-    - name: DATABASE_URL
-      value: postgres://postgres:1234@localhost:5432/budget_db
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx
-    hosts:
-      - host: coinsmer.com
-secrets:
-  - name: db-password
-    value: 1234 
+  ingressClassName: nginx
+  rules:
+  - host: "https://budgetsmart.stk8s.66bit.ru/"
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: tcc-postgres-service
+            port:
+              number: 5432
