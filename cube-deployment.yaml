@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: "https://budgetsmart.stk8s.66bit.ru/"
+  - host: "postgres://postgres:1234@localhost:5432/budget_db"
     http:
       paths:
       - pathType: Prefix
