@@ -22,12 +22,12 @@
   <div class="form-login">
     <div class="active" class="form-login-title">
       <ul>
-        <li><a href="{% url 'login' %}">Вход</a></li>
+        <li><a href="{% url 'main' %}">Вход</a></li>
         <li class="active">Регистрация</li>
       </ul>
     </div>
 
-    <form action="{% url 'register' %}" method="post">
+    <form action="{% url 'main' %}" method="post">
       {% csrf_token %}
       {{ form }}
       <div class="btn button-login-title">
